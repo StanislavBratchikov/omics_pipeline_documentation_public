@@ -65,9 +65,9 @@ RNA-seq Data Structure
    project/
    ├── data/
    │   ├── sample1/
-   │   │   └── featureCounts.txt
+   │   │   └── featureCounts.csv
    │   ├── sample2/
-   │   │   └── featureCounts.txt
+   │   │   └── featureCounts.csv
    │   └── ...
    ├── metadata/
    │   └── sample_metadata.csv
@@ -145,7 +145,7 @@ Both pipelines support multiple organisms:
    python DE_pipelines/RNAseq/run_pipeline_command_line.py \
        --analysis_type both \
        --organism mus_musculus \
-       --feature_counts_pattern "mouse_data/*/featureCounts.txt" \
+       --feature_counts_pattern "mouse_data/*/featureCounts.csv" \
        --sample_metadata_path metadata/mouse_samples.csv
 
 Analysis Types
@@ -162,7 +162,7 @@ Run quality control, normalization, and visualization:
    python DE_pipelines/RNAseq/run_pipeline_command_line.py \
        --analysis_type preprocessing \
        --organism homo_sapiens \
-       --feature_counts_pattern "data/*/featureCounts.txt" \
+       --feature_counts_pattern "data/*/featureCounts.csv" \
        --sample_metadata_path metadata/samples.csv \
        --preprocessing_output_dir results/preprocessing/
 
@@ -208,7 +208,7 @@ Run both preprocessing and differential expression:
    python DE_pipelines/RNAseq/run_pipeline_command_line.py \
        --analysis_type both \
        --organism homo_sapiens \
-       --feature_counts_pattern "data/*/featureCounts.txt" \
+       --feature_counts_pattern "data/*/featureCounts.csv" \
        --sample_metadata_path metadata/samples.csv \
        --preprocessing_output_dir results/preprocessing/ \
        --output_dir results/de_analysis/ \
