@@ -6,7 +6,7 @@ Visual flowcharts showing the workflow and key parameters for both analysis pipe
 RNA-seq Pipeline
 ---------------
 
-.. image:: rnaseq_pipeline.svg
+.. image:: rnaseq_pipeline_workflow.svg
    :width: 100%
    :alt: RNA-seq Pipeline Flowchart
    :align: center
@@ -16,7 +16,7 @@ The RNA-seq pipeline processes featureCounts data through quality control, norma
 TMT Proteomics Pipeline
 ----------------------
 
-.. image:: Proteomics_pipeline.svg
+.. image:: proteomics_pipeline_flow.svg
    :width: 100%
    :alt: TMT Proteomics Pipeline Flowchart
    :align: center
