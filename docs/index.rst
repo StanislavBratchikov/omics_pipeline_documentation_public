@@ -24,6 +24,7 @@ Features
    :caption: Contents:
 
    installation
+   pipeline_overview 
    usage
    rnaseq
    tmt
