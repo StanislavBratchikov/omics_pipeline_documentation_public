@@ -43,5 +43,5 @@ Key Differences
      - Not available
      - Combat integration
    * - Normalization
-     - Size factors
-     - Sum + Peptide + MAD
+     - TPM-, Sum- normalizations
+     - Sum-, Peptide-, MAD- normalizations
