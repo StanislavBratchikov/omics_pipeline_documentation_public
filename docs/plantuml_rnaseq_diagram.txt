@@ -1,0 +1,133 @@
+@startuml
+!theme aws-orange
+title RNA-seq Pipeline CLI Parameters - Component Architecture
+
+package "Pipeline Control" {
+  component "Analysis Controller" as AC
+  component "Configuration Manager" as CM
+}
+
+package "Preprocessing Module" {
+  component "Data Loader" as DL
+  component "Normalizer & Scaler" as NORM
+  component "Transcript Subsetter" as TS
+  component "Feature Selector" as FS
+  component "Visualizer" as VIZ
+}
+
+package "Differential Expression Module" {
+  component "DESeq2 Engine" as DE
+  component "Results Generator" as RG
+}
+
+package "Enrichment Analysis Module" {
+  component "GSEA Engine" as GSEA
+  component "Enrichr Engine" as ENR
+}
+
+note top of AC
+**Analysis Controller**
+--analysis_type (preprocessing|de|both)
+--organism (homo_sapiens|mus_musculus|other)
+--verbose
+--ignore_excel_limit
+end note
+
+note top of CM
+**Configuration Manager**
+--preprocessing_config
+--de_config
+end note
+
+note left of DL
+**Data Loader**
+--feature_counts_pattern
+--sample_metadata_path
+--gene_info_path
+--mitocarta_path
+--lncRNAs_and_prot_coding_genes_path
+--h5ad_filename
+--preprocessing_output_dir
+end note
+
+note left of NORM
+**Normalizer & Scaler**
+--apply_sum_norm
+--target_sum
+--scale_max_value
+end note
+
+note left of TS
+**Transcript Subsetter**
+--transcript_types
+end note
+
+note left of FS
+**Feature Selector**
+--max_mean
+--min_disp
+--mean_threshold_for_expressed_genes
+end note
+
+note left of VIZ
+**Visualizer**
+--pca_color
+--pca_components
+--umap_plot
+--n_neighbors
+--n_pcs
+--skip_plot_oxphos
+--oxphos_complexes
+end note
+
+note right of DE
+**DESeq2 Engine**
+--input_file
+--anndata_data_layer
+--output_dir
+--skip_expressed_filter
+--design_factors
+--condition_pairs
+end note
+
+note right of RG
+**Results Generator**
+--logfc_threshold
+--pval_threshold
+end note
+
+note bottom of GSEA
+**GSEA Engine**
+--skip_enrichment
+--enrich_databases
+--min_size
+--max_size
+--permutation_num
+end note
+
+note bottom of ENR
+**Enrichr Engine**
+--logfc_enrich
+--pval_enrich
+--pval_enrich_column
+end note
+
+' Relationships
+AC --> DL : triggers
+AC --> DE : triggers
+AC --> GSEA : triggers
+
+CM ..> DL : configures
+CM ..> DE : configures
+CM ..> GSEA : configures
+
+DL --> NORM : raw data
+NORM --> TS : normalized & scaled data
+TS --> FS : subset data
+FS --> VIZ : filtered data
+VIZ --> DE : processed data
+
+DE --> RG : DE results
+RG --> GSEA : DE results
+RG --> ENR : DE results
+@enduml

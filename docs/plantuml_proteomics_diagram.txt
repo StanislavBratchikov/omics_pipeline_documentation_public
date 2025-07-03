@@ -1,0 +1,152 @@
+@startuml
+!theme aws-orange
+title Proteomics Pipeline CLI Parameters - Component Architecture
+
+package "Pipeline Control" {
+  component "Analysis Controller" as AC
+  component "Configuration Manager" as CM
+}
+
+package "Preprocessing Module" {
+  component "Data Loader" as DL
+  component "Normalizer" as NORM
+  component "Protein Mapper" as PM
+  component "Batch Corrector" as BC
+  component "Feature Selector & Scaler" as FS
+  component "Visualizer" as VIZ
+}
+
+package "Differential Expression Module" {
+  component "Limma Engine" as LIMMA
+  component "Results Generator" as RG
+}
+
+package "Enrichment Analysis Module" {
+  component "GSEA Engine" as GSEA
+  component "Enrichr Engine" as ENR
+}
+
+note top of AC
+**Analysis Controller**
+--analysis_type (preprocessing|de|both)
+--organism (homo_sapiens|mus_musculus|other)
+--verbose
+--ignore_excel_limit
+end note
+
+note top of CM
+**Configuration Manager**
+--preprocessing_config
+--de_config
+end note
+
+note left of DL
+**Data Loader**
+--expression_data_path
+--protein_metadata_path
+--sample_metadata_path
+--preprocessing_output_dir
+--h5ad_filename
+end note
+
+note left of NORM
+**Normalizer**
+--skip_peptide_normalize
+--skip_sum_normalize
+--target_sum
+--skip_mad_normalization
+end note
+
+note left of PM
+**Protein Mapper**
+--identify_canonical_proteins
+--apply_uniparc_mapping
+--uniparc_db_path
+--swiss_prot_ref_path
+end note
+
+note left of BC
+**Batch Corrector**
+--batch_correct
+--batch_id_column
+--mod_id_column
+end note
+
+note left of FS
+**Feature Selector & Scaler**
+--min_mean
+--max_mean
+--min_disp
+--scale_max_value
+end note
+
+note left of VIZ
+**Visualizer**
+--pca_color
+--pca_components
+--umap_plot
+--n_neighbors
+--n_pcs
+--skip_plot_oxphos
+--oxphos_complexes
+--mitocarta_path
+end note
+
+note right of LIMMA
+**Limma Engine**
+--input_file
+--de_output_dir
+--anndata_data_layer
+--ignore_non_canonical
+--design_factors
+--condition_pairs
+end note
+
+note right of RG
+**Results Generator**
+--logfc_threshold
+--pval_threshold
+end note
+
+note bottom of GSEA
+**GSEA Engine**
+--skip_enrichment
+--enrich_databases
+--min_size
+--max_size
+--permutation_num
+end note
+
+note bottom of ENR
+**Enrichr Engine**
+--logfc_enrich
+--pval_enrich
+--pval_enrich_column
+end note
+
+' Relationships
+AC --> DL : triggers
+AC --> LIMMA : triggers
+AC --> GSEA : triggers
+
+CM ..> DL : configures
+CM ..> LIMMA : configures
+CM ..> GSEA : configures
+
+DL --> NORM : raw data
+NORM --> PM : normalized data
+PM --> BC : mapped data
+BC --> FS : batch corrected data
+FS --> VIZ : scaled & filtered data
+VIZ --> LIMMA : processed data
+
+LIMMA --> RG : DE results
+RG --> GSEA : DE results
+RG --> ENR : DE results
+
+' Data flow annotations
+note top of DL : Entry point for\nprotein expression data
+note right of VIZ : Generates QC plots\nand h5ad output
+note bottom of RG : Creates volcano plots\nand DE tables
+note left of GSEA : Performs pathway\nenrichment analysis
+@enduml
