@@ -6,7 +6,7 @@ Visual flowcharts showing the workflow and key parameters for both analysis pipe
 RNA-seq Pipeline
 ---------------
 
-.. image:: rnaseq_pipeline_workflow.svg
+.. image:: rnaseq_pipeline_flow.svg
    :width: 100%
    :alt: RNA-seq Pipeline Flowchart
    :align: center
